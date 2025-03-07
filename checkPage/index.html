@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='utf-8'>
+  <title>数据校验</title>
+</head>
+
+<body>
+  <div>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      body {
+        background-image: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-size: initial;
+        background-repeat: initial;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: rgb(250, 250, 250);
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        min-height: 100vh;
+      }
+
+      .menu-container {
+        background-image: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-size: initial;
+        background-repeat: initial;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: rgb(255, 255, 255);
+        padding-top: 1rem;
+        padding-right: 2rem;
+        padding-bottom: 1rem;
+        padding-left: 2rem;
+      }
+
+      .menu-nav {
+        display: flex;
+        row-gap: 2rem;
+        column-gap: 2rem;
+        list-style-position: initial;
+        list-style-image: initial;
+        list-style-type: none;
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        padding-top: 0px;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        padding-left: 0px;
+      }
+
+      .content-container {
+        max-width: 800px;
+        margin-top: 2rem;
+        margin-right: auto;
+        margin-bottom: 2rem;
+        margin-left: auto;
+        padding-top: 0px;
+        padding-right: 1rem;
+        padding-bottom: 0px;
+        padding-left: 1rem;
+      }
+
+      .content-title {
+        color: rgb(44, 62, 80);
+        margin-bottom: 2rem;
+        border-bottom-width: 3px;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(52, 152, 219);
+        padding-bottom: 0.5rem;
+        font-size: 1.5rem;
+      }
+
+      .content-section {
+        background-image: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-size: initial;
+        background-repeat: initial;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: white;
+        padding-top: 2rem;
+        padding-right: 2rem;
+        padding-bottom: 2rem;
+        padding-left: 2rem;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 20px;
+        margin-bottom: 2rem;
+      }
+
+      .content-form-row {
+        margin-bottom: 1.5rem;
+      }
+
+      .content-form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: rgb(52, 73, 94);
+        font-weight: 500;
+      }
+
+      .content-required {
+        color: rgb(231, 76, 60);
+        margin-right: 0.3rem;
+      }
+
+      .content-input-group {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 1.5rem;
+        column-gap: 1.5rem;
+      }
+
+      .content-input {
+        width: 90%;
+        padding-top: 0.8rem;
+        padding-right: 0.8rem;
+        padding-bottom: 0.8rem;
+        padding-left: 0.8rem;
+        border-top-width: 2px;
+        border-right-width: 2px;
+        border-bottom-width: 2px;
+        border-left-width: 2px;
+        border-top-style: solid;
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-left-style: solid;
+        border-top-color: rgb(189, 195, 199);
+        border-right-color: rgb(189, 195, 199);
+        border-bottom-color: rgb(189, 195, 199);
+        border-left-color: rgb(189, 195, 199);
+        border-image-source: initial;
+        border-image-slice: initial;
+        border-image-width: initial;
+        border-image-outset: initial;
+        border-image-repeat: initial;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
+        font-size: 14px;
+        transition-behavior: normal;
+        transition-duration: 0.3s;
+        transition-timing-function: ease;
+        transition-delay: 0s;
+        transition-property: border-color;
+      }
+
+      .content-input:focus {
+        outline-color: initial;
+        outline-style: none;
+        outline-width: initial;
+        border-top-color: rgb(52, 152, 219);
+        border-right-color: rgb(52, 152, 219);
+        border-bottom-color: rgb(52, 152, 219);
+        border-left-color: rgb(52, 152, 219);
+      }
+
+      .content-radio-group {
+        display: flex;
+        row-gap: 2rem;
+        column-gap: 2rem;
+        align-items: center;
+      }
+
+      .content-radio-item {
+        display: flex;
+        align-items: center;
+        row-gap: 0.5rem;
+        column-gap: 0.5rem;
+      }
+
+      .content-sampling-rate {
+        display: none;
+        margin-left: 1rem;
+      }
+
+      .content-sampling-rate input {
+        width: 120px;
+      }
+
+      .content-sampling-chunk {
+        display: none;
+        margin-left: 1rem;
+      }
+
+      .content-sampling-chunk input {
+        width: 120px;
+      }
+
+      .content-select {
+        width: 200px;
+        padding-top: 0.8rem;
+        padding-right: 0.8rem;
+        padding-bottom: 0.8rem;
+        padding-left: 0.8rem;
+        border-top-width: 2px;
+        border-right-width: 2px;
+        border-bottom-width: 2px;
+        border-left-width: 2px;
+        border-top-style: solid;
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-left-style: solid;
+        border-top-color: rgb(189, 195, 199);
+        border-right-color: rgb(189, 195, 199);
+        border-bottom-color: rgb(189, 195, 199);
+        border-left-color: rgb(189, 195, 199);
+        border-image-source: initial;
+        border-image-slice: initial;
+        border-image-width: initial;
+        border-image-outset: initial;
+        border-image-repeat: initial;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
+        background-image: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-size: initial;
+        background-repeat: initial;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: white;
+      }
+
+      .content-submit-btn {
+        background-image: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-size: initial;
+        background-repeat: initial;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: rgb(52, 152, 219);
+        color: white;
+        padding-top: 1rem;
+        padding-right: 2.5rem;
+        padding-bottom: 1rem;
+        padding-left: 2.5rem;
+        border-top-width: initial;
+        border-right-width: initial;
+        border-bottom-width: initial;
+        border-left-width: initial;
+        border-top-style: none;
+        border-right-style: none;
+        border-bottom-style: none;
+        border-left-style: none;
+        border-top-color: initial;
+        border-right-color: initial;
+        border-bottom-color: initial;
+        border-left-color: initial;
+        border-image-source: initial;
+        border-image-slice: initial;
+        border-image-width: initial;
+        border-image-outset: initial;
+        border-image-repeat: initial;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition-behavior: normal;
+        transition-duration: 0.3s;
+        transition-timing-function: ease;
+        transition-delay: 0s;
+        transition-property: background;
+      }
+
+      .content-submit-btn:hover {
+        background-image: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-size: initial;
+        background-repeat: initial;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: rgb(41, 128, 185);
+      }
+
+      header {
+        background-color: rgb(255, 255, 255);
+      }
+
+      header .navbar-nav a.nav-link {
+        color: rgb(119, 119, 119);
+      }
+
+      header .navbar-nav a.nav-link:hover {
+        color: rgb(82, 139, 255);
+      }
+
+      header .navbar-nav .active a.nav-link {
+        color: rgb(68, 68, 68);
+      }
+
+      header .navbar-toggler-icon {
+        background-image: url("img/svg%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+      }
+      header.bg-dark .navbar-nav a.nav-link {
+        color: rgb(220, 220, 220);
+      }
+      header.bg-dark .navbar-nav a.nav-link:hover {
+        color: rgb(82, 139, 255);
+      }
+      header.bg-dark .navbar-nav .active a.nav-link {
+        color: rgb(255, 255, 255);
+      }
+      header.bg-dark .navbar-toggler-icon {
+        background-image: url("img/svg%3E");
+      }
+      header + header {
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-color: rgb(238, 238, 238);
+      }
+    </style><!-- 菜单栏 -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数据对比系统</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/page.min.css" />
+    <header data-block-type="headers" data-id="1">
+      <div class="container">
+        <nav class="navbar navbar-expand-md no-gutters">
+          <div class="col-2 text-left"><a href="../homepage/index.html"><img src="img/dc.png" height="22" alt="DATACHECKER"
+                itemprop="logo" class="custom-logo" /></a></div><button type="button" data-toggle="collapse"
+            data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+          <div id="navbarNav4" class="collapse navbar-collapse justify-content-center col-md-8">
+            <ul class="navbar-nav justify-content-center">
+              <li class="nav-item active"><a href="../homepage/index.html" class="nav-link">首页 <span
+                    class="sr-only">(current)</span></a></li>
+              <li class="nav-item"><a href="../homepage/index.html" class="nav-link">数据迁移</a></li>
+              <li class="nav-item"><a href="index.html" class="nav-link">数据校验</a></li>
+              <li class="nav-item"><a href="../homepage/index.html" class="nav-link">数据备份</a></li>
+            </ul>
+          </div>
+          <ul class="navbar-nav col-2 justify-content-end d-none d-md-flex">
+            <li class="nav-item"><a href="../homepage/index.html" class="nav-link"><i class="fa fa-facebook"></i></a></li>
+            <li class="nav-item"><a href="../homepage/index.html" class="nav-link"><i class="fa fa-twitter"></i></a></li>
+            <li class="nav-item"><a href="../homepage/index.html" class="nav-link"><i class="fa fa-github"></i></a></li>
+            <li class="nav-item"><a href="../homepage/index.html" class="nav-link"><i class="fa fa-google"></i></a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="menu-container">
+      <nav class="menu-nav"></nav>
+    </div><!-- 内容区域 -->
+    <div class="content-container">
+      <h1 class="content-title">创建数据校验</h1>
+      <form class="content-section"><!-- 任务名称 -->
+        <!-- 源数据 -->
+        <div class="content-form-row"><label class="content-form-label"><span class="content-required">*</span>源数据
+          </label>
+          <div class="content-input-group"><input type="url" placeholder="请输入源数据URL" required
+              class="content-input" /><input type="text" placeholder="请输入起始块号" required class="content-input" id="startBlock"/>
+             
+              </div>
+        </div><!-- 目标数据 -->
+        <div class="content-form-row"><label class="content-form-label"><span class="content-required">*</span>目标数据
+          </label>
+          <div class="content-input-group"><input type="url" placeholder="请输入目标数据URL" required
+              class="content-input" /><input type="text" placeholder="请输入结束块号" required
+              class="content-input" id="endBlock"/>
+              
+              </div>
+        </div><!-- 对比方式 -->
+        <div class="content-form-row"><label class="content-form-label"><span class="content-required">*</span>对比方式
+          </label>
+          <div class="content-radio-group">
+            <div class="content-radio-item"><input type="radio" name="compare-type" id="full" checked /><label
+                for="full">全量校验</label></div>
+            <div class="content-radio-item"><input type="radio" name="compare-type" id="random" /><label
+                for="random">抽样校验</label>
+              <div class="content-sampling-rate"><input type="number" placeholder="抽样数" min="1" max="100"
+                  class="content-input" /></div>
+            </div>
+            <div class="content-radio-item"><input type="radio" name="compare-type" id="chunk" /><label
+                for="chunk">分快校验</label>
+              <div class="content-sampling-chunk"><input type="number" placeholder="分快数" min="1" max="100"
+                  class="content-input" /></div>
+            </div>
+          </div>
+        </div><!-- 对比并发数 -->
+        <div class="content-form-row"><label class="content-form-label">校验并发数</label><select class="content-select">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+          </select></div>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <button type="button" class="content-submit-btn" onclick="startDownload()">开始下载</button>
+          <button type="button" class="content-submit-btn" onclick="startJudge()">开始校验</button>
+          <button type="button" class="content-submit-btn" onclick="downloadReport()">下载校验报告</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      // 快速对比交互逻辑
+      document.querySelectorAll('input[name="compare-type"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+          const samplingRate = document.querySelector('.content-sampling-rate');
+          samplingRate.style.display = radio.id === 'random' ? 'inline-block' : 'none';
+          if (radio.id === 'random') {
+            samplingRate.querySelector('input').focus();
+          }
+        });
+      });
+      document.querySelectorAll('input[name="compare-type"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+          const samplingChunk = document.querySelector('.content-sampling-chunk');
+          samplingChunk.style.display = radio.id === 'chunk' ? 'inline-block' : 'none';
+          if (radio.id === 'chunk') {
+            samplingChunk.querySelector('input').focus();
+          }
+        });
+      });
+      // 修改 URL 验证函数
+      function validateAndFormatUrl(url) {
+        if (!url) return null;
+        
+        // 移除首尾空格
+        url = url.trim();
+        
+        try {
+          // 如果没有协议前缀，添加 https://
+          if (!url.match(/^https?:\/\//i)) {
+            url = 'https://' + url;
+          }
+          
+          // 创建 URL 对象进行验证
+          const urlObj = new URL(url);
+          
+          // 确保有主机名
+          if (!urlObj.hostname) {
+            return null;
+          }
+          
+          // 返回格式化后的 URL 字符串，移除末尾的斜杠
+          return urlObj.toString().replace(/\/$/, '');
+        } catch (e) {
+          console.error('URL 验证失败:', e);
+          return null;
+        }
+      }
+      // 修改下载功能
+      async function startDownload(e) {
+        if(e) e.preventDefault();
+
+        try {
+          const sourceUrlInput = document.querySelector('input[placeholder="请输入源数据URL"]').value;
+          const targetUrlInput = document.querySelector('input[placeholder="请输入目标数据URL"]').value;
+          
+          console.log('原始输入:', {
+            sourceApiUrl: sourceUrlInput,
+            targetApiUrl: targetUrlInput
+          });
+
+          const sourceApiUrl = validateAndFormatUrl(sourceUrlInput);
+          const targetApiUrl = validateAndFormatUrl(targetUrlInput);
+          
+          console.log('格式化后:', {
+            sourceApiUrl,
+            targetApiUrl
+          });
+
+          const startBlock = parseInt(document.getElementById('startBlock').value);
+          const endBlock = parseInt(document.getElementById('endBlock').value);
+
+          // 验证输入
+          if(!sourceApiUrl) {
+            alert('请输入有效的源数据URL地址\n格式如: https://eos.greymass.com');
+            return;
+          }
+          
+          if(!targetApiUrl) {
+            alert('请输入有效的目标数据URL地址\n格式如: https://eos.greymass.com');
+            return;
+          }
+          
+          if(isNaN(startBlock) || startBlock < 0) {
+            alert('请输入有效的起始区块号（必须是非负整数）');
+            return;
+          }
+          
+          if(isNaN(endBlock) || endBlock < startBlock) {
+            alert('请输入有效的结束区块号（必须大于等于起始区块号）');
+            return;
+          }
+
+          // 修改参数名称以匹配后端期望的格式
+          const payload = {
+            sourceApiUrl,    
+            targetApiUrl,    
+            startBlock,
+            endBlock
+          };
+
+          console.log('发送下载请求:', payload);
+
+          const response = await fetch('http://localhost:8080/blockchain/fetch', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if(!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const result = await response.json();
+          console.log('下载响应:', result);
+          alert('下载请求已发送成功！');
+
+        } catch(error) {
+          console.error('下载失败:', error);
+          alert('下载失败: ' + error.message);
+        }
+      }
+      // 校验功能
+      async function startJudge(e) {
+        if(e) e.preventDefault(); 
+
+        try {
+          const sourceUrlInput = document.querySelector('input[placeholder="请输入源数据URL"]').value;
+          const targetUrlInput = document.querySelector('input[placeholder="请输入目标数据URL"]').value;
+          
+          console.log('原始输入:', {
+            sourceApiUrl: sourceUrlInput,
+            targetApiUrl: targetUrlInput
+          });
+
+          const sourceApiUrl = validateAndFormatUrl(sourceUrlInput);
+          const targetApiUrl = validateAndFormatUrl(targetUrlInput);
+          
+          console.log('格式化后:', {
+            sourceApiUrl,
+            targetApiUrl
+          });
+
+          const startBlock = parseInt(document.getElementById('startBlock').value);
+          const endBlock = parseInt(document.getElementById('endBlock').value);
+          const compareType = document.querySelector('input[name="compare-type"]:checked').id;
+          const concurrency = parseInt(document.querySelector('.content-select').value);
+
+          // 验证输入
+          if(!sourceApiUrl) {
+            alert('请输入有效的源数据URL地址\n格式如: https://eos.greymass.com');
+            return;
+          }
+          
+          if(!targetApiUrl) {
+            alert('请输入有效的目标数据URL地址\n格式如: https://eos.greymass.com');
+            return;
+          }
+          
+          if(isNaN(startBlock) || startBlock < 0) {
+            alert('请输入有效的起始区块号（必须是非负整数）');
+            return;
+          }
+          
+          if(isNaN(endBlock) || endBlock < startBlock) {
+            alert('请输入有效的结束区块号（必须大于等于起始区块号）');
+            return;
+          }
+
+          // 构建请求数据
+          const payload = {
+            sourceApiUrl,
+            targetApiUrl,
+            startBlock,
+            endBlock,
+            concurrency
+          };
+
+          // 根据对比类型选择接口
+          let apiUrl;
+          if(compareType === 'random') {
+            apiUrl = 'http://localhost:8080/judge/random';
+            const sampleNumber = parseInt(document.querySelector('.content-sampling-rate input').value);
+            if(!sampleNumber || isNaN(sampleNumber)) {
+              alert('请输入有效的抽样数量');
+              return;
+            }
+            payload.number = sampleNumber;
+          } else if(compareType === 'chunk') {
+            apiUrl = 'http://localhost:8080/judge/chunk';
+            const chunkSize = parseInt(document.querySelector('.content-sampling-chunk input').value);
+            if(!chunkSize || isNaN(chunkSize)) {
+              alert('请输入有效的分块大小');
+              return;
+            }
+            payload.chunkSize = chunkSize;
+          } else {
+            apiUrl = 'http://localhost:8080/judge/all';
+          }
+
+          console.log('发送请求:', {
+            url: apiUrl,
+            payload: payload
+          });
+
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if(!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const result = await response.json();
+          console.log('校验结果:', result);
+          alert('校验请求已发送成功！');
+
+        } catch(error) {
+          console.error('校验失败:', error);
+          alert('校验失败: ' + error.message);
+        }
+      }
+
+      function downloadReport() {
+
+
+        fetch('http://localhost:8080/judge/downloadReport')
+          .then(response => {
+            if (!response.ok) throw new Error(`HTTP错误 ${response.status}`);
+            return response.blob();
+          })
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `report_${new Date().toISOString().slice(0,10)}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          })
+          .catch(error => {
+            console.error('下载失败:', error);
+            alert(`报告下载失败: ${error.message}`);
+          });
+
+      }
+    </script>
+  </div>
+</body>
+
+</html>
